@@ -90,8 +90,6 @@ typedef struct BufferAccessStrategyData
 	Buffer buffers[FLEXIBLE_ARRAY_MEMBER];
 } BufferAccessStrategyData;
 
-void StrategyAccessBuffer(int buf_id, int event_num); /* cs3223 */
-
 /* Prototypes for internal functions */
 static BufferDesc *GetBufferFromRing(BufferAccessStrategy strategy,
 									 uint32 *buf_state);
@@ -797,14 +795,4 @@ bool StrategyRejectBuffer(BufferAccessStrategy strategy, BufferDesc *buf, bool f
 	strategy->buffers[strategy->current] = InvalidBuffer;
 
 	return true;
-}
-
-/*
-cs3223
-StrategyAccessBuffer  -- update YACLOCK's data structures when a buffer page is accessed.
-Note that event_num must be 1, 2, 3, or 4 corresponding to the four events in YACLOCK replacement policy.
-*/
-void StrategyAccessBuffer(int buf_id, int event_num)
-{
-	elog(ERROR, "StrategyAccessBuffer: Not implemented!");
 }
