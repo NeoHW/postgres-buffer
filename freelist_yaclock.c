@@ -830,7 +830,27 @@ Note that event_num must be 1, 2, 3, or 4 corresponding to the four events in YA
 void
 StrategyAccessBuffer(int buf_id, int event_num)
 {
-	elog(ERROR, "StrategyAccessBuffer: Not implemented!");
+    /* TODO */
+    switch (event_num) {
+        // P exist in buffer pool so add one to reference list
+        case 1:
+            break;
+        // P is not in buffer pool and the free list is not empty
+        case 2:
+            break;
+        // P is not in buffer pool and free list is empty
+        case 3:
+
+            break;
+        default:
+            break;
+    }
+
+    return 0;
+
+
+    }
+
 }
 
 
