@@ -1,0 +1,243 @@
+cs3223bw@xlogin0:~/cs3223_assign1$ ./test-yaclock.sh
+waiting for server to shut down.... done
+server stopped
+waiting for server to start.... done
+server started
+INFO:  updateCaseOne: Set ref_bit for buffer 1
+INFO:  updateCaseOne: Set ref_bit for buffer 0
+INFO:  updateCaseOne: Set ref_bit for buffer 0
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 2 into queue tail
+INFO:  Allocated buffer from free list: 2
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 3 into queue tail
+INFO:  Allocated buffer from free list: 3
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 4 into queue tail
+INFO:  Allocated buffer from free list: 4
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 5 into queue tail
+INFO:  Allocated buffer from free list: 5
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 6 into queue tail
+INFO:  Allocated buffer from free list: 6
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 7 into queue tail
+INFO:  Allocated buffer from free list: 7
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseOne: Set ref_bit for buffer 3
+INFO:  updateCaseOne: Set ref_bit for buffer 2
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 8 into queue tail
+INFO:  Allocated buffer from free list: 8
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 9 into queue tail
+INFO:  Allocated buffer from free list: 9
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 10 into queue tail
+INFO:  Allocated buffer from free list: 10
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 11 into queue tail
+INFO:  Allocated buffer from free list: 11
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 12 into queue tail
+INFO:  Allocated buffer from free list: 12
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 13 into queue tail
+INFO:  Allocated buffer from free list: 13
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 14 into queue tail
+INFO:  Allocated buffer from free list: 14
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseTwo: Inserted buffer 15 into queue tail
+INFO:  Allocated buffer from free list: 15
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseOne: Set ref_bit for buffer 3
+INFO:  updateCaseOne: Set ref_bit for buffer 2
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseOne: Set ref_bit for buffer 6
+INFO:  updateCaseOne: Set ref_bit for buffer 7
+INFO:  StrategyGetBuffer called.
+INFO:  Initializing next pointer to queue head: 0
+INFO:  [updateCaseThree]: Checking buffer 0
+INFO:  [updateCaseThree]: Buffer 0 is unpinned
+INFO:  [updateCaseThree]: Buffer 0 has reference bit set, giving second chance
+INFO:  [updateCaseThree]: Checking buffer 1
+INFO:  [updateCaseThree]: Buffer 1 is unpinned
+INFO:  [updateCaseThree]: Buffer 1 has reference bit set, giving second chance
+INFO:  [updateCaseThree]: Checking buffer 2
+INFO:  [updateCaseThree]: Buffer 2 is unpinned
+INFO:  [updateCaseThree]: Buffer 2 has reference bit set, giving second chance
+INFO:  [updateCaseThree]: Checking buffer 3
+INFO:  [updateCaseThree]: Buffer 3 is unpinned
+INFO:  [updateCaseThree]: Buffer 3 has reference bit set, giving second chance
+INFO:  [updateCaseThree]: Checking buffer 4
+INFO:  [updateCaseThree]: Buffer 4 is unpinned
+INFO:  [updateCaseThree]: Buffer 4 is selected for replacement
+INFO:  [removeFromQueue]: Removed buffer 4, next=4, head=0, tail=15, num_elements=15
+INFO:  updateCaseThree: Evicted buffer 4
+INFO:  Selected buffer for eviction: 4
+INFO:  StrategyGetBuffer called.
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Buffer 5 is unpinned
+INFO:  [updateCaseThree]: Buffer 5 is selected for replacement
+INFO:  [removeFromQueue]: Removed buffer 5, next=4, head=0, tail=14, num_elements=14
+INFO:  updateCaseThree: Evicted buffer 5
+INFO:  Selected buffer for eviction: 5
+INFO:  StrategyGetBuffer called.
+INFO:  updateCaseOne: Set ref_bit for buffer 9
+INFO:  updateCaseOne: Set ref_bit for buffer 8
+INFO:  StrategyGetBuffer called.
+INFO:  StrategyGetBuffer called.
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Buffer 5 is unpinned
+INFO:  [updateCaseThree]: Buffer 5 is selected for replacement
+INFO:  [removeFromQueue]: Removed buffer 5, next=4, head=0, tail=13, num_elements=13
+INFO:  updateCaseThree: Evicted buffer 5
+INFO:  Selected buffer for eviction: 5
+INFO:  StrategyGetBuffer called.
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Buffer 5 is unpinned
+INFO:  [updateCaseThree]: Buffer 5 is selected for replacement
+INFO:  [removeFromQueue]: Removed buffer 5, next=4, head=0, tail=12, num_elements=12
+INFO:  updateCaseThree: Evicted buffer 5
+INFO:  Selected buffer for eviction: 5
+INFO:  StrategyGetBuffer called.
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+psql: error: connection to server on socket "/tmp/.s.PGSQL.5075" failed: FATAL:  no unpinned buffers available
+Creating database assign1 ...
+INFO:  updateCaseOne: Set ref_bit for buffer 1
+INFO:  updateCaseOne: Set ref_bit for buffer 0
+INFO:  updateCaseOne: Set ref_bit for buffer 0
+INFO:  updateCaseOne: Set ref_bit for buffer 5
+INFO:  StrategyGetBuffer called.
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  updateCaseOne: Set ref_bit for buffer 1
+INFO:  updateCaseOne: Set ref_bit for buffer 0
+INFO:  updateCaseOne: Set ref_bit for buffer 0
+INFO:  StrategyGetBuffer called.
+INFO:  [updateCaseThree]: Checking buffer 5
+INFO:  [updateCaseThree]: Buffer 5 is unpinned
+INFO:  [updateCaseThree]: Buffer 5 has reference bit set, giving second chance
+INFO:  [updateCaseThree]: Checking buffer 9
+INFO:  [updateCaseThree]: Buffer 9 is unpinned
+INFO:  [updateCaseThree]: Buffer 9 has reference bit set, giving second chance
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Buffer 10 is unpinned
+INFO:  [updateCaseThree]: Buffer 10 is selected for replacement
+INFO:  [removeFromQueue]: Removed buffer 10, next=6, head=0, tail=11, num_elements=11
+INFO:  updateCaseThree: Evicted buffer 10
+INFO:  Selected buffer for eviction: 10
+INFO:  StrategyGetBuffer called.
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+createdb: error: connection to server on socket "/tmp/.s.PGSQL.5075" failed: FATAL:  no unpinned buffers available
+INFO:  updateCaseOne: Set ref_bit for buffer 1
+INFO:  updateCaseOne: Set ref_bit for buffer 0
+INFO:  updateCaseOne: Set ref_bit for buffer 0
+INFO:  StrategyGetBuffer called.
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Buffer 10 is unpinned
+INFO:  [updateCaseThree]: Buffer 10 is selected for replacement
+INFO:  [removeFromQueue]: Removed buffer 10, next=6, head=0, tail=10, num_elements=10
+INFO:  updateCaseThree: Evicted buffer 10
+INFO:  Selected buffer for eviction: 10
+INFO:  StrategyGetBuffer called.
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+INFO:  [updateCaseThree]: Checking buffer 10
+psql: error: connection to server on socket "/tmp/.s.PGSQL.5075" failed: FATAL:  no unpinned buffers available
+ERROR: restart server with 16 buffer pages!

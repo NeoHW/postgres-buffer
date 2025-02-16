@@ -1,7 +1,6 @@
 // NOTE THAT FREELIST IS simply linked list of empty buffer descriptors (each descriptor has a 1-1 correspondence to a buffer pool slot
 // and holds the metadata of the stored page in the corresponding slot)
 
-
 /*-------------------------------------------------------------------------
  *
  * freelist.c
@@ -42,7 +41,6 @@ typedef struct
 	 * get an actual buffer, it needs to be used modulo NBuffers.
 	 */
 	pg_atomic_uint32 nextVictimBuffer;
-	
 
 	int firstFreeBuffer; /* Head of list of unused buffers */
 	int lastFreeBuffer;	 /* Tail of list of unused buffers */
@@ -65,14 +63,12 @@ typedef struct
 	 */
 	int bgwprocno;
 
-
 	int *queue;
 	bool *ref_bits;
 	int queue_head;
-	int queue_tail;
+	int queue_tail; 
+	int num_elements;
 	int next;
-	int current_size;
-
 } BufferStrategyControl;
 
 /* Pointers to shared state */
@@ -114,10 +110,9 @@ static void AddBufferToRing(BufferAccessStrategy strategy,
 							BufferDesc *buf);
 void updateCaseOne(int buffer_id);
 void updateCaseTwo(int buffer_id);
-BufferDesc *updateCaseThree(int buffer_id, BufferAccessStrategy strategy, uint32 *buf_state);
+void updateCaseThree(int buffer_id);
 void updateCaseFour(int buffer_id);
 void removeFromQueue(int buffer_id);
-
 
 /*
  * ClockSweepTick - Helper routine for StrategyGetBuffer()
@@ -222,9 +217,11 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state, bool *from_r
 {
 	BufferDesc *buf;
 	int bgwprocno;
+	int trycounter;
 	uint32 local_buf_state; /* to avoid repeated (de-)referencing */
 
 	*from_ring = false;
+	elog(INFO, "StrategyGetBuffer called.");
 
 	/*
 	 * If given a strategy object, see whether it can select a buffer. We
@@ -331,6 +328,7 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state, bool *from_r
 				if (strategy != NULL)
 					AddBufferToRing(strategy, buf);
 				*buf_state = local_buf_state;
+				elog(INFO, "Allocated buffer from free list: %d", buf->buf_id);
 				return buf;
 			}
 			UnlockBufHdr(buf, local_buf_state);
@@ -338,8 +336,60 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state, bool *from_r
 	}
 
 	/* Nothing on the freelist, so run the "clock sweep" algorithm */
-	// StrategyAccessBuffer(buffer_id, 3);
-	return updateCaseThree(buf->buf_id, strategy, buf_state);
+	trycounter = NBuffers;
+	if (StrategyControl->next == -1)
+	{
+		StrategyControl->next = StrategyControl->queue_head;
+		elog(INFO, "Initializing next pointer to queue head: %d", StrategyControl->next);
+	}
+
+	for (;;)
+	{
+		int buffer_id = StrategyControl->queue[StrategyControl->next];
+		buf = GetBufferDescriptor(buffer_id);
+		elog(INFO, "[updateCaseThree]: Checking buffer %d", buffer_id);
+
+		/*
+		 * If the buffer is pinned or has a nonzero usage_count, we cannot use
+		 * it; decrement the usage_count (unless pinned) and keep scanning.
+		 */
+		local_buf_state = LockBufHdr(buf);
+
+		if (BUF_STATE_GET_REFCOUNT(local_buf_state) == 0)
+		{
+			elog(INFO, "[updateCaseThree]: Buffer %d is unpinned", buffer_id);
+			if (StrategyControl->ref_bits[buffer_id])
+			{
+				elog(INFO, "[updateCaseThree]: Buffer %d has reference bit set, giving second chance", buffer_id);
+				StrategyControl->ref_bits[buffer_id] = false;
+				StrategyControl->next++;
+			}
+			else
+			{
+				/* Found a usable buffer */
+				elog(INFO, "[updateCaseThree]: Buffer %d is selected for replacement", buffer_id);
+				StrategyAccessBuffer(buffer_id, 3);
+
+				if (strategy != NULL)
+					AddBufferToRing(strategy, buf);
+				*buf_state = local_buf_state;
+				elog(INFO, "Selected buffer for eviction: %d", buffer_id);
+				return buf;
+			}
+		}
+		else if (--trycounter == 0) {
+			/*
+			* We've scanned all the buffers without making any state changes,
+			* so all the buffers are pinned (or were when we looked at them).
+			* We could hope that someone will free one eventually, but it's
+			* probably better to fail than to risk getting stuck in an
+			* infinite loop.
+			*/
+			UnlockBufHdr(buf, local_buf_state);
+			elog(ERROR, "no unpinned buffers available");
+		}
+		UnlockBufHdr(buf, local_buf_state);
+	}
 }
 
 /*
@@ -351,7 +401,6 @@ void StrategyFreeBuffer(BufferDesc *buf)
 {
 	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
 
-	StrategyAccessBuffer(buf->buf_id, 4);
 	/*
 	 * It is possible that we are told to put something in the freelist that
 	 * is already in it; don't screw up the list if so.
@@ -362,6 +411,8 @@ void StrategyFreeBuffer(BufferDesc *buf)
 		if (buf->freeNext < 0)
 			StrategyControl->lastFreeBuffer = buf->buf_id;
 		StrategyControl->firstFreeBuffer = buf->buf_id;
+		StrategyAccessBuffer(buf->buf_id, 4);
+		elog(INFO, "Freed buffer: %d", buf->buf_id);
 	}
 
 	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
@@ -517,18 +568,21 @@ void StrategyInitialize(bool init)
 		StrategyControl->queue = (int *)ShmemInitStruct("Buffer Queue", mul_size(NBuffers, sizeof(int)), &found);
 		StrategyControl->ref_bits = (bool *)ShmemInitStruct("Ref Bit Array", mul_size(NBuffers, sizeof(bool)), &found);
 
-		for (int i = 0; i < NBuffers; ++i) {
+		for (int i = 0; i < NBuffers; ++i)
+		{
 			StrategyControl->queue[i] = i;
 			StrategyControl->ref_bits[i] = false;
 		}
 		StrategyControl->queue_head = 0;
-		StrategyControl->queue_tail = NBuffers-1;
+		StrategyControl->queue_tail = 0;
 		StrategyControl->next = -1;
-		StrategyControl->current_size = 0;
-
+		StrategyControl->num_elements = 0;
 	}
 	else
 		Assert(!init);
+
+	elog(INFO, "YACLOCK strategy initialized: queue_head=%d, queue_tail=%d, next=%d, num_elements=%d",
+			StrategyControl->queue_head, StrategyControl->queue_tail, StrategyControl->next, StrategyControl->num_elements);
 }
 
 /* ----------------------------------------------------------------
@@ -836,7 +890,7 @@ void StrategyAccessBuffer(int buf_id, int event_num)
 
 	// P is not in buffer pool and free list is empty
 	case 3:
-		// updateCaseThree(buf_id);
+		updateCaseThree(buf_id);
 		break;
 
 	case 4:
@@ -848,124 +902,61 @@ void StrategyAccessBuffer(int buf_id, int event_num)
 
 void updateCaseOne(int buffer_id)
 {
-    SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
-    StrategyControl->ref_bits[buffer_id] = true;
-    SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
+	StrategyControl->ref_bits[buffer_id] = true;
+	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+	elog(INFO, "updateCaseOne: Set ref_bit for buffer %d", buffer_id);
 }
 
 void updateCaseTwo(int buffer_id)
 {
-    SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
-	StrategyControl->queue_tail = (StrategyControl->queue_tail + 1) % NBuffers;
-	StrategyControl->queue[StrategyControl->queue_tail]	= buffer_id;
+	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
+	StrategyControl->queue[StrategyControl->queue_tail] = buffer_id;
 	StrategyControl->ref_bits[buffer_id] = false;
-    SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+	StrategyControl->queue_tail = (StrategyControl->queue_tail + 1) % NBuffers;
+	StrategyControl->num_elements++;
+	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+	elog(INFO, "updateCaseTwo: Inserted buffer %d into queue tail", buffer_id);
 }
 
-BufferDesc *updateCaseThree(int buffer_id, BufferAccessStrategy strategy, uint32 *buf_state)
+void updateCaseThree(int buffer_id)
 {
 	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
-	int trycounter = NBuffers; // in this change, trycounter is only for pinned buffers, so we can throw error if all pinned
-
-	if (StrategyControl->next == -1)
-	{
-		StrategyControl->next = StrategyControl->queue_head;
-	}
-
-	for (;;)
-	{
-		int buffer_id = StrategyControl->queue[StrategyControl->next];
-		BufferDesc *buf = GetBufferDescriptor(buffer_id);
-
-		uint32 local_buf_state = LockBufHdr(buf);
-
-		if (BUF_STATE_GET_REFCOUNT(local_buf_state) == 0)
-		{
-			if (StrategyControl->ref_bits[buffer_id])
-			{
-				StrategyControl->ref_bits[buffer_id] = false;
-			}
-			else
-			{
-				/* Found a usable buffer */
-				removeFromQueue(buffer_id);
-				StrategyControl->queue[StrategyControl->queue_tail]	= buffer_id;
-				StrategyControl->queue_tail = (StrategyControl->queue_tail + 1) % NBuffers;
-
-				if (strategy != NULL)
-					AddBufferToRing(strategy, buf);
-				*buf_state = local_buf_state;
-				SpinLockRelease(&StrategyControl->buffer_strategy_lock);
-				return buf;
-			}
-		}
-		else if (--trycounter == 0)
-		{
-			/*
-			 * We've scanned all the buffers without making any state changes,
-			 * so all the buffers are pinned (or were when we looked at them).
-			 * We could hope that someone will free one eventually, but it's
-			 * probably better to fail than to risk getting stuck in an
-			 * infinite loop.
-			 */
-			UnlockBufHdr(buf, local_buf_state);
-			elog(ERROR, "no unpinned buffers available");
-			SpinLockRelease(&StrategyControl->buffer_strategy_lock);
-		}
-
-		StrategyControl->next = (StrategyControl->next + 1) % NBuffers;
-		UnlockBufHdr(buf, local_buf_state);
-	}
-	
-    SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+	removeFromQueue(buffer_id);
+	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+	elog(INFO, "updateCaseThree: Evicted buffer %d", buffer_id);
 }
 
 void updateCaseFour(int buffer_id)
 {
 	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
 	removeFromQueue(buffer_id);
-    SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+	elog(INFO, "updateCaseFour: Buffer %d removed from queue", buffer_id);
 }
 
-/* 
+/*
  * Assume that this would be called when spinlock is already held, then we dont lock it here
- * This function moves next forward, then remove the buffer and shifts all remaining elements left
+ * This function, remove the buffer and shifts all remaining elements left
+ * Since we are shifting the elements left, next would not need to be updated
  */
 void removeFromQueue(int buffer_id)
 {
-	int found_index = -1;
-
-	for (int i = 0; i < StrategyControl->current_size; i++)
-	{
-		if (StrategyControl->queue[i] == buffer_id)
-		{
-			found_index = i;
-			break;
-		}
-	}
-
-	if (found_index == -1)
-	{
-		elog(ERROR, "[removeFromQueue]: buffer_id not found");
-		return;
-	}
-
-	if (StrategyControl->next == found_index)
-	{
-		StrategyControl->next = (StrategyControl->next + 1) % NBuffers;
-	}
-
 	/* Shift remaining elements left */
-	for (int i = found_index; i < StrategyControl->current_size - 1; i++)
+	for (int i = buffer_id; i != StrategyControl->queue_tail; i = (i + 1) % NBuffers)
 	{
-		StrategyControl->queue[i] = StrategyControl->queue[i + 1];
+		StrategyControl->queue[i] = StrategyControl->queue[(i+1) % NBuffers];
 	}
 
 	StrategyControl->queue_tail = (StrategyControl->queue_tail - 1 + NBuffers) % NBuffers;
-	StrategyControl->current_size--;
+	StrategyControl->num_elements--;
 
-	if (StrategyControl->current_size == 0)
+	if (StrategyControl->num_elements == 0)
 	{
 		StrategyControl->next = -1;
+		StrategyControl->queue_head = 0;
+        StrategyControl->queue_tail = 0;
 	}
+	elog(INFO, "[removeFromQueue]: Removed buffer %d, next=%d, head=%d, tail=%d, num_elements=%d",
+                            buffer_id, StrategyControl->next, StrategyControl->queue_head, StrategyControl->queue_tail, StrategyControl->num_elements);
 }
