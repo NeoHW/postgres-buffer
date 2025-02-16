@@ -668,6 +668,8 @@ PrefetchBuffer(Relation reln, ForkNumber forkNum, BlockNumber blockNum)
  * successful.  Return true if the buffer is valid and still has the expected
  * tag.  In that case, the buffer is pinned and the usage count is bumped.
  */
+
+// tries to accesss a recently used buffer without performing a full buffer lookup, optimising performance
 bool
 ReadRecentBuffer(RelFileLocator rlocator, ForkNumber forkNum, BlockNumber blockNum,
 				 Buffer recent_buffer)
@@ -679,8 +681,11 @@ ReadRecentBuffer(RelFileLocator rlocator, ForkNumber forkNum, BlockNumber blockN
 
 	Assert(BufferIsValid(recent_buffer));
 
+	// manage buffer pin tracking
 	ResourceOwnerEnlarge(CurrentResourceOwner);
 	ReservePrivateRefCountEntry();
+
+	// to store the block's location details
 	InitBufferTag(&tag, &rlocator, forkNum, blockNum);
 
 	if (BufferIsLocal(recent_buffer))
@@ -701,6 +706,7 @@ ReadRecentBuffer(RelFileLocator rlocator, ForkNumber forkNum, BlockNumber blockN
 		}
 	}
 	else
+	// shared buffer
 	{
 		bufHdr = GetBufferDescriptor(recent_buffer - 1);
 		have_private_ref = GetPrivateRefCount(recent_buffer) > 0;
@@ -1622,6 +1628,7 @@ BufferAlloc(SMgrRelation smgr, char relpersistence, ForkNumber forkNum,
 	/* see if the block is in the buffer pool already */
 	LWLockAcquire(newPartitionLock, LW_SHARED);
 	existing_buf_id = BufTableLookup(&newTag, newHash);
+
 	if (existing_buf_id >= 0)
 	{
 		BufferDesc *buf;
@@ -1650,6 +1657,8 @@ BufferAlloc(SMgrRelation smgr, char relpersistence, ForkNumber forkNum,
 			 */
 			*foundPtr = false;
 		}
+
+		// calls with case 1 since P exists in buffer pool
 		StrategyAccessBuffer(existing_buf_id, 1); /* cs3223 */
 
 		return buf;

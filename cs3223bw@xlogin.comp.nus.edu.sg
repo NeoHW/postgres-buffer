@@ -112,12 +112,6 @@ static BufferDesc *GetBufferFromRing(BufferAccessStrategy strategy,
 									 uint32 *buf_state);
 static void AddBufferToRing(BufferAccessStrategy strategy,
 							BufferDesc *buf);
-void updateCaseOne(int buffer_id);
-void updateCaseTwo(int buffer_id);
-BufferDesc *updateCaseThree(int buffer_id, BufferAccessStrategy strategy, uint32 *buf_state);
-void updateCaseFour(int buffer_id);
-void removeFromQueue(int buffer_id);
-
 
 /*
  * ClockSweepTick - Helper routine for StrategyGetBuffer()
@@ -222,6 +216,7 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state, bool *from_r
 {
 	BufferDesc *buf;
 	int bgwprocno;
+	int trycounter;
 	uint32 local_buf_state; /* to avoid repeated (de-)referencing */
 
 	*from_ring = false;
@@ -339,7 +334,7 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state, bool *from_r
 
 	/* Nothing on the freelist, so run the "clock sweep" algorithm */
 	// StrategyAccessBuffer(buffer_id, 3);
-	return updateCaseThree(buf->buf_id, strategy, buf_state);
+	updateCaseThree(buf->buf_id, strategy, buf_state);
 }
 
 /*
@@ -351,7 +346,8 @@ void StrategyFreeBuffer(BufferDesc *buf)
 {
 	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
 
-	StrategyAccessBuffer(buf->buf_id, 4);
+	StrategyAccessBuffer(buf->buf_id, int 4)
+
 	/*
 	 * It is possible that we are told to put something in the freelist that
 	 * is already in it; don't screw up the list if so.
@@ -446,7 +442,7 @@ Size StrategyShmemSize(void)
 	/* size of the shared replacement strategy control block */
 	size = add_size(size, MAXALIGN(sizeof(BufferStrategyControl)));
 
-	/* size of the ref_bits array */
+	/* size of the ref_bit array */
 	size = add_size(size, mul_size(NBuffers, sizeof(bool)));
 
 	/* size of the queue array */
@@ -515,15 +511,15 @@ void StrategyInitialize(bool init)
 		StrategyControl->bgwprocno = -1;
 
 		StrategyControl->queue = (int *)ShmemInitStruct("Buffer Queue", mul_size(NBuffers, sizeof(int)), &found);
-		StrategyControl->ref_bits = (bool *)ShmemInitStruct("Ref Bit Array", mul_size(NBuffers, sizeof(bool)), &found);
+		StrategyControl->ref_bit = (bool *)ShmemInitStruct("Ref Bit Array", mul_size(NBuffers, sizeof(bool)), &found);
 
 		for (int i = 0; i < NBuffers; ++i) {
 			StrategyControl->queue[i] = i;
-			StrategyControl->ref_bits[i] = false;
+			StrategyControl->ref_bit[i] = false;
 		}
 		StrategyControl->queue_head = 0;
 		StrategyControl->queue_tail = NBuffers-1;
-		StrategyControl->next = -1;
+		StrategyControl->next = NULL;
 		StrategyControl->current_size = 0;
 
 	}
@@ -844,30 +840,32 @@ void StrategyAccessBuffer(int buf_id, int event_num)
 	default:
 		break;
 	}
+
+	return 0;
 }
 
 void updateCaseOne(int buffer_id)
 {
     SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
-    StrategyControl->ref_bits[buffer_id] = true;
+    StrategyControl->ref_bit[buffer_id] = true;
     SpinLockRelease(&StrategyControl->buffer_strategy_lock);
 }
 
 void updateCaseTwo(int buffer_id)
 {
     SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
-	StrategyControl->queue_tail = (StrategyControl->queue_tail + 1) % NBuffers;
+	StrategyControl->queue_tail = (strategyControl->queue_tail + 1) % NBuffers;
 	StrategyControl->queue[StrategyControl->queue_tail]	= buffer_id;
 	StrategyControl->ref_bits[buffer_id] = false;
     SpinLockRelease(&StrategyControl->buffer_strategy_lock);
 }
 
-BufferDesc *updateCaseThree(int buffer_id, BufferAccessStrategy strategy, uint32 *buf_state)
+void updateCaseThree(int buffer_id, BufferAccessStrategy strategy, uint32 *buf_state)
 {
 	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
 	int trycounter = NBuffers; // in this change, trycounter is only for pinned buffers, so we can throw error if all pinned
 
-	if (StrategyControl->next == -1)
+	if (StrategyControl->next == NULL)
 	{
 		StrategyControl->next = StrategyControl->queue_head;
 	}
@@ -911,6 +909,7 @@ BufferDesc *updateCaseThree(int buffer_id, BufferAccessStrategy strategy, uint32
 			UnlockBufHdr(buf, local_buf_state);
 			elog(ERROR, "no unpinned buffers available");
 			SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+			return;
 		}
 
 		StrategyControl->next = (StrategyControl->next + 1) % NBuffers;
@@ -966,6 +965,6 @@ void removeFromQueue(int buffer_id)
 
 	if (StrategyControl->current_size == 0)
 	{
-		StrategyControl->next = -1;
+		StrategyControl->next = NULL;
 	}
 }
