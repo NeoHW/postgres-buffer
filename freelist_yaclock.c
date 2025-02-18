@@ -344,7 +344,7 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state, bool *from_r
 		elog(INFO, "[StrategyGetBuffer][case 3]: Initializing next pointer to queue head: %d", StrategyControl->next);
 	}
 
-	trycounter = NBuffers;
+	trycounter = NBuffers * 2;
 
 	for (;;)
 	{

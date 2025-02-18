@@ -5312,4 +5312,510 @@ INFO:  [StrategyGetBuffer][case 3]: Checking buffer 1
 INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=1, num_elements=16]
 INFO:  Queue: [0 1 2 3 4 5 6 11 10 9 12 15 13 14 7 8 ]
 INFO:  buffer 1, next=1, head=0, tail=16, num_elements=16
-ERROR:  no unpinned buffers available
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 2
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=2, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 10 9 12 15 13 14 7 8 ]
+INFO:  buffer 2, next=2, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 3
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=3, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 10 9 12 15 13 14 7 8 ]
+INFO:  buffer 3, next=3, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 4
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=4, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 10 9 12 15 13 14 7 8 ]
+INFO:  buffer 4, next=4, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 5
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=5, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 10 9 12 15 13 14 7 8 ]
+INFO:  buffer 5, next=5, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 6
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=6, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 10 9 12 15 13 14 7 8 ]
+INFO:  buffer 6, next=6, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 11
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=7, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 10 9 12 15 13 14 7 8 ]
+INFO:  buffer 11, next=7, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 10
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=8, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 10 9 12 15 13 14 7 8 ]
+INFO:  buffer 10, next=8, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 8 is selected for replacement
+INFO:  [updateCaseThree]: Evicting buffer index 8 with buffer 10
+INFO:  [removeFromQueue]: Removing from freelist_index 8queue 
+INFO:  [removeFromQueue] finished: Queue state -> [head=0, tail=15, next=8, num_elements=15]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 12 15 13 14 7 8 ]
+INFO:  [updateCaseThree]: Evicted buffer index 8 with buffer 10
+INFO:  [addToQueueTail]: Adding buffer 10 to tail
+INFO:  moving next forward by one if next == queue_tail-1: next = 8, tail = 16
+INFO:  [addToQueueTail]: Inserted buffer 10 into queue tail
+INFO:  [addToQueueTail] finished: Queue state -> [head=0, tail=16, next=8, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 12 15 13 14 7 8 10 ]
+INFO:  [updateCaseThree] finished: Queue state -> [head=0, tail=16, next=8, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 12 15 13 14 7 8 10 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 16 bufid 10
+INFO:  [updateCaseOne]: Set ref_bit for buffer 9
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=8, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 12 15 13 14 7 8 10 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 5 bufid 9
+NOTICE:  test_bufmgr unpin_block blkno 20 bufid 15
+NOTICE:  test_bufmgr unpin_block blkno 1 bufid 11
+INFO:  [updateCaseOne]: Set ref_bit for buffer 7
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=8, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 12 15 13 14 7 8 10 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 4 bufid 7
+NOTICE:  test_bufmgr unpin_block blkno 11 bufid 14
+INFO:  [updateCaseOne]: Set ref_bit for buffer 15
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=8, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 12 15 13 14 7 8 10 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 20 bufid 15
+INFO:  [updateCaseOne]: Set ref_bit for buffer 15
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=8, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 12 15 13 14 7 8 10 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 20 bufid 15
+INFO:  [updateCaseOne]: Set ref_bit for buffer 8
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=8, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 12 15 13 14 7 8 10 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 3 bufid 8
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 9
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=8, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 12 15 13 14 7 8 10 ]
+INFO:  buffer 9, next=8, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 9 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 12
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=9, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 12 15 13 14 7 8 10 ]
+INFO:  buffer 12, next=9, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 9 is selected for replacement
+INFO:  [updateCaseThree]: Evicting buffer index 9 with buffer 12
+INFO:  [removeFromQueue]: Removing from freelist_index 9queue 
+INFO:  [removeFromQueue] finished: Queue state -> [head=0, tail=15, next=9, num_elements=15]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 13 14 7 8 10 ]
+INFO:  [updateCaseThree]: Evicted buffer index 9 with buffer 12
+INFO:  [addToQueueTail]: Adding buffer 12 to tail
+INFO:  moving next forward by one if next == queue_tail-1: next = 9, tail = 16
+INFO:  [addToQueueTail]: Inserted buffer 12 into queue tail
+INFO:  [addToQueueTail] finished: Queue state -> [head=0, tail=16, next=9, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 13 14 7 8 10 12 ]
+INFO:  [updateCaseThree] finished: Queue state -> [head=0, tail=16, next=9, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 13 14 7 8 10 12 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 18 bufid 12
+NOTICE:  test_bufmgr unpin_block blkno 11 bufid 14
+INFO:  [updateCaseOne]: Set ref_bit for buffer 11
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=9, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 13 14 7 8 10 12 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 1 bufid 11
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 15
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=9, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 13 14 7 8 10 12 ]
+INFO:  buffer 15, next=9, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 15 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 13
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 13 14 7 8 10 12 ]
+INFO:  buffer 13, next=10, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 10 is selected for replacement
+INFO:  [updateCaseThree]: Evicting buffer index 10 with buffer 13
+INFO:  [removeFromQueue]: Removing from freelist_index 10queue 
+INFO:  [removeFromQueue] finished: Queue state -> [head=0, tail=15, next=10, num_elements=15]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 10 12 ]
+INFO:  [updateCaseThree]: Evicted buffer index 10 with buffer 13
+INFO:  [addToQueueTail]: Adding buffer 13 to tail
+INFO:  moving next forward by one if next == queue_tail-1: next = 10, tail = 16
+INFO:  [addToQueueTail]: Inserted buffer 13 into queue tail
+INFO:  [addToQueueTail] finished: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 10 12 13 ]
+INFO:  [updateCaseThree] finished: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 10 12 13 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 13 bufid 13
+NOTICE:  test_bufmgr unpin_block blkno 4 bufid 7
+INFO:  [updateCaseOne]: Set ref_bit for buffer 9
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 10 12 13 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 5 bufid 9
+NOTICE:  test_bufmgr unpin_block blkno 3 bufid 8
+INFO:  [updateCaseOne]: Set ref_bit for buffer 12
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 10 12 13 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 18 bufid 12
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 14
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 10 12 13 ]
+INFO:  buffer 14, next=10, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 14 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 7
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=11, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 10 12 13 ]
+INFO:  buffer 7, next=11, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 7 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 8
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=12, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 10 12 13 ]
+INFO:  buffer 8, next=12, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 8 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 10
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=13, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 10 12 13 ]
+INFO:  buffer 10, next=13, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 13 is selected for replacement
+INFO:  [updateCaseThree]: Evicting buffer index 13 with buffer 10
+INFO:  [removeFromQueue]: Removing from freelist_index 13queue 
+INFO:  [removeFromQueue] finished: Queue state -> [head=0, tail=15, next=13, num_elements=15]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 13 ]
+INFO:  [updateCaseThree]: Evicted buffer index 13 with buffer 10
+INFO:  [addToQueueTail]: Adding buffer 10 to tail
+INFO:  moving next forward by one if next == queue_tail-1: next = 13, tail = 16
+INFO:  [addToQueueTail]: Inserted buffer 10 into queue tail
+INFO:  [addToQueueTail] finished: Queue state -> [head=0, tail=16, next=13, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 13 10 ]
+INFO:  [updateCaseThree] finished: Queue state -> [head=0, tail=16, next=13, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 13 10 ]
+NOTICE:  test_bufmgr read_pin_block blkno 9 bufid 10
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 12
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=13, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 13 10 ]
+INFO:  buffer 12, next=13, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 12 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 13
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=14, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 13 10 ]
+INFO:  buffer 13, next=14, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 14 is selected for replacement
+INFO:  [updateCaseThree]: Evicting buffer index 14 with buffer 13
+INFO:  [removeFromQueue]: Removing from freelist_index 14queue 
+INFO:  [removeFromQueue] finished: Queue state -> [head=0, tail=15, next=14, num_elements=15]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 ]
+INFO:  [updateCaseThree]: Evicted buffer index 14 with buffer 13
+INFO:  [addToQueueTail]: Adding buffer 13 to tail
+INFO:  moving next forward by one if next == queue_tail-1: next = 14, tail = 16
+INFO:  [addToQueueTail]: Inserted buffer 13 into queue tail
+INFO:  [addToQueueTail] finished: Queue state -> [head=0, tail=16, next=14, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  [updateCaseThree] finished: Queue state -> [head=0, tail=16, next=14, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 7 bufid 13
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 10
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=14, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  buffer 10, next=14, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 13
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=15, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  buffer 13, next=15, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 15 is selected for replacement
+INFO:  [updateCaseThree]: Evicting buffer index 15 with buffer 13
+INFO:  [removeFromQueue]: Removing from freelist_index 15queue 
+INFO:  [removeFromQueue] finished: Queue state -> [head=0, tail=15, next=15, num_elements=15]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 ]
+INFO:  [updateCaseThree]: Evicted buffer index 15 with buffer 13
+INFO:  [addToQueueTail]: Adding buffer 13 to tail
+INFO:  moving next forward by one if next == queue_tail-1: next = 15, tail = 16
+INFO:  after moving: next = 0, tail = 16
+INFO:  [addToQueueTail]: Inserted buffer 13 into queue tail
+INFO:  [addToQueueTail] finished: Queue state -> [head=0, tail=16, next=0, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  [updateCaseThree] finished: Queue state -> [head=0, tail=16, next=0, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 19 bufid 13
+INFO:  [updateCaseOne]: Set ref_bit for buffer 15
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=0, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 20 bufid 15
+NOTICE:  test_bufmgr unpin_block blkno 9 bufid 10
+INFO:  [updateCaseOne]: Set ref_bit for buffer 9
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=0, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 5 bufid 9
+INFO:  [updateCaseOne]: Set ref_bit for buffer 15
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=0, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 20 bufid 15
+INFO:  [updateCaseOne]: Set ref_bit for buffer 8
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=0, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 3 bufid 8
+INFO:  [updateCaseOne]: Set ref_bit for buffer 11
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=0, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 1 bufid 11
+INFO:  [updateCaseOne]: Set ref_bit for buffer 10
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=0, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 9 bufid 10
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 0
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=0, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  buffer 0, next=0, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 1
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=1, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  buffer 1, next=1, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 2
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=2, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  buffer 2, next=2, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 3
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=3, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  buffer 3, next=3, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 4
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=4, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  buffer 4, next=4, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 5
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=5, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  buffer 5, next=5, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 6
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=6, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  buffer 6, next=6, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 11
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=7, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  buffer 11, next=7, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 11 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 9
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=8, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  buffer 9, next=8, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 9 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 15
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=9, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  buffer 15, next=9, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 15 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 14
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 14 7 8 12 10 13 ]
+INFO:  buffer 14, next=10, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 10 is selected for replacement
+INFO:  [updateCaseThree]: Evicting buffer index 10 with buffer 14
+INFO:  [removeFromQueue]: Removing from freelist_index 10queue 
+INFO:  [removeFromQueue] finished: Queue state -> [head=0, tail=15, next=10, num_elements=15]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 7 8 12 10 13 ]
+INFO:  [updateCaseThree]: Evicted buffer index 10 with buffer 14
+INFO:  [addToQueueTail]: Adding buffer 14 to tail
+INFO:  moving next forward by one if next == queue_tail-1: next = 10, tail = 16
+INFO:  [addToQueueTail]: Inserted buffer 14 into queue tail
+INFO:  [addToQueueTail] finished: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 7 8 12 10 13 14 ]
+INFO:  [updateCaseThree] finished: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 7 8 12 10 13 14 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 17 bufid 14
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 7
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 7 8 12 10 13 14 ]
+INFO:  buffer 7, next=10, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 10 is selected for replacement
+INFO:  [updateCaseThree]: Evicting buffer index 10 with buffer 7
+INFO:  [removeFromQueue]: Removing from freelist_index 10queue 
+INFO:  [removeFromQueue] finished: Queue state -> [head=0, tail=15, next=10, num_elements=15]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 12 10 13 14 ]
+INFO:  [updateCaseThree]: Evicted buffer index 10 with buffer 7
+INFO:  [addToQueueTail]: Adding buffer 7 to tail
+INFO:  moving next forward by one if next == queue_tail-1: next = 10, tail = 16
+INFO:  [addToQueueTail]: Inserted buffer 7 into queue tail
+INFO:  [addToQueueTail] finished: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 12 10 13 14 7 ]
+INFO:  [updateCaseThree] finished: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 12 10 13 14 7 ]
+NOTICE:  test_bufmgr read_pin_block blkno 12 bufid 7
+INFO:  [updateCaseOne]: Set ref_bit for buffer 9
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 12 10 13 14 7 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 5 bufid 9
+NOTICE:  test_bufmgr unpin_block blkno 12 bufid 7
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 8
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=10, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 12 10 13 14 7 ]
+INFO:  buffer 8, next=10, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 8 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 12
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=11, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 12 10 13 14 7 ]
+INFO:  buffer 12, next=11, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 11 is selected for replacement
+INFO:  [updateCaseThree]: Evicting buffer index 11 with buffer 12
+INFO:  [removeFromQueue]: Removing from freelist_index 11queue 
+INFO:  [removeFromQueue] finished: Queue state -> [head=0, tail=15, next=11, num_elements=15]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 14 7 ]
+INFO:  [updateCaseThree]: Evicted buffer index 11 with buffer 12
+INFO:  [addToQueueTail]: Adding buffer 12 to tail
+INFO:  moving next forward by one if next == queue_tail-1: next = 11, tail = 16
+INFO:  [addToQueueTail]: Inserted buffer 12 into queue tail
+INFO:  [addToQueueTail] finished: Queue state -> [head=0, tail=16, next=11, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 14 7 12 ]
+INFO:  [updateCaseThree] finished: Queue state -> [head=0, tail=16, next=11, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 14 7 12 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 2 bufid 12
+INFO:  [updateCaseOne]: Set ref_bit for buffer 13
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=11, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 14 7 12 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 19 bufid 13
+INFO:  [updateCaseOne]: Set ref_bit for buffer 12
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=11, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 14 7 12 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 2 bufid 12
+INFO:  [updateCaseOne]: Set ref_bit for buffer 15
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=11, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 14 7 12 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 20 bufid 15
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 10
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=11, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 14 7 12 ]
+INFO:  buffer 10, next=11, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 10 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 13
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=12, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 14 7 12 ]
+INFO:  buffer 13, next=12, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 13 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 14
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=13, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 14 7 12 ]
+INFO:  buffer 14, next=13, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 13 is selected for replacement
+INFO:  [updateCaseThree]: Evicting buffer index 13 with buffer 14
+INFO:  [removeFromQueue]: Removing from freelist_index 13queue 
+INFO:  [removeFromQueue] finished: Queue state -> [head=0, tail=15, next=13, num_elements=15]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 ]
+INFO:  [updateCaseThree]: Evicted buffer index 13 with buffer 14
+INFO:  [addToQueueTail]: Adding buffer 14 to tail
+INFO:  moving next forward by one if next == queue_tail-1: next = 13, tail = 16
+INFO:  [addToQueueTail]: Inserted buffer 14 into queue tail
+INFO:  [addToQueueTail] finished: Queue state -> [head=0, tail=16, next=13, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+INFO:  [updateCaseThree] finished: Queue state -> [head=0, tail=16, next=13, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 18 bufid 14
+INFO:  [updateCaseOne]: Set ref_bit for buffer 14
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=13, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 18 bufid 14
+INFO:  [updateCaseOne]: Set ref_bit for buffer 7
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=13, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 12 bufid 7
+INFO:  [updateCaseOne]: Set ref_bit for buffer 13
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=13, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 19 bufid 13
+INFO:  [updateCaseOne]: Set ref_bit for buffer 12
+INFO:  [updateCaseOne] finished: Queue state -> [head=0, tail=16, next=13, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 2 bufid 12
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 7
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=13, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+INFO:  buffer 7, next=13, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 7 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 12
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=14, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+INFO:  buffer 12, next=14, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 12 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 14
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=15, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+INFO:  buffer 14, next=15, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 14 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 0
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=0, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+INFO:  buffer 0, next=0, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 1
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=1, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+INFO:  buffer 1, next=1, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 2
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=2, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+INFO:  buffer 2, next=2, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 3
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=3, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+INFO:  buffer 3, next=3, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 4
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=4, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+INFO:  buffer 4, next=4, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 5
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=5, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+INFO:  buffer 5, next=5, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 6
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=6, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+INFO:  buffer 6, next=6, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 11
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=7, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 11 9 15 8 10 13 7 12 14 ]
+INFO:  buffer 11, next=7, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 7 is selected for replacement
+INFO:  [updateCaseThree]: Evicting buffer index 7 with buffer 11
+INFO:  [removeFromQueue]: Removing from freelist_index 7queue 
+INFO:  [removeFromQueue] finished: Queue state -> [head=0, tail=15, next=7, num_elements=15]
+INFO:  Queue: [0 1 2 3 4 5 6 9 15 8 10 13 7 12 14 ]
+INFO:  [updateCaseThree]: Evicted buffer index 7 with buffer 11
+INFO:  [addToQueueTail]: Adding buffer 11 to tail
+INFO:  moving next forward by one if next == queue_tail-1: next = 7, tail = 16
+INFO:  [addToQueueTail]: Inserted buffer 11 into queue tail
+INFO:  [addToQueueTail] finished: Queue state -> [head=0, tail=16, next=7, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 9 15 8 10 13 7 12 14 11 ]
+INFO:  [updateCaseThree] finished: Queue state -> [head=0, tail=16, next=7, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 9 15 8 10 13 7 12 14 11 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 0 bufid 11
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 9
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=7, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 9 15 8 10 13 7 12 14 11 ]
+INFO:  buffer 9, next=7, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 9 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 15
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=8, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 9 15 8 10 13 7 12 14 11 ]
+INFO:  buffer 15, next=8, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 15 has reference bit set, giving second chance
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 8
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=9, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 9 15 8 10 13 7 12 14 11 ]
+INFO:  buffer 8, next=9, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 9 is selected for replacement
+INFO:  [updateCaseThree]: Evicting buffer index 9 with buffer 8
+INFO:  [removeFromQueue]: Removing from freelist_index 9queue 
+INFO:  [removeFromQueue] finished: Queue state -> [head=0, tail=15, next=9, num_elements=15]
+INFO:  Queue: [0 1 2 3 4 5 6 9 15 10 13 7 12 14 11 ]
+INFO:  [updateCaseThree]: Evicted buffer index 9 with buffer 8
+INFO:  [addToQueueTail]: Adding buffer 8 to tail
+INFO:  moving next forward by one if next == queue_tail-1: next = 9, tail = 16
+INFO:  [addToQueueTail]: Inserted buffer 8 into queue tail
+INFO:  [addToQueueTail] finished: Queue state -> [head=0, tail=16, next=9, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 9 15 10 13 7 12 14 11 8 ]
+INFO:  [updateCaseThree] finished: Queue state -> [head=0, tail=16, next=9, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 9 15 10 13 7 12 14 11 8 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 16 bufid 8
+INFO:  [StrategyGetBuffer][case 3]: Checking buffer 10
+INFO:  [StrategyGetBuffer] current state: Queue state -> [head=0, tail=16, next=9, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 9 15 10 13 7 12 14 11 8 ]
+INFO:  buffer 10, next=9, head=0, tail=16, num_elements=16
+INFO:  [StrategyGetBuffer][case 3]: Buffer 9 is selected for replacement
+INFO:  [updateCaseThree]: Evicting buffer index 9 with buffer 10
+INFO:  [removeFromQueue]: Removing from freelist_index 9queue 
+INFO:  [removeFromQueue] finished: Queue state -> [head=0, tail=15, next=9, num_elements=15]
+INFO:  Queue: [0 1 2 3 4 5 6 9 15 13 7 12 14 11 8 ]
+INFO:  [updateCaseThree]: Evicted buffer index 9 with buffer 10
+INFO:  [addToQueueTail]: Adding buffer 10 to tail
+INFO:  moving next forward by one if next == queue_tail-1: next = 9, tail = 16
+INFO:  [addToQueueTail]: Inserted buffer 10 into queue tail
+INFO:  [addToQueueTail] finished: Queue state -> [head=0, tail=16, next=9, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 9 15 13 7 12 14 11 8 10 ]
+INFO:  [updateCaseThree] finished: Queue state -> [head=0, tail=16, next=9, num_elements=16]
+INFO:  Queue: [0 1 2 3 4 5 6 9 15 13 7 12 14 11 8 10 ]
+NOTICE:  test_bufmgr read_unpin_block blkno 11 bufid 10
+NOTICE:  test_bufmgr unpin_block blkno 30 bufid 0
+NOTICE:  test_bufmgr unpin_block blkno 31 bufid 1
+NOTICE:  test_bufmgr unpin_block blkno 32 bufid 2
+NOTICE:  test_bufmgr unpin_block blkno 33 bufid 3
+NOTICE:  test_bufmgr unpin_block blkno 34 bufid 4
+NOTICE:  test_bufmgr unpin_block blkno 35 bufid 5
+NOTICE:  test_bufmgr unpin_block blkno 36 bufid 6
