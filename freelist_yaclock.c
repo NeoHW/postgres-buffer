@@ -916,7 +916,7 @@ int getFreeListIndex(int buffer_id) {
 
 void updateCaseOne(int buffer_id)
 {
-	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
+	//SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
 	int freelist_index;
 	
 	freelist_index = getFreeListIndex(buffer_id);
@@ -926,38 +926,38 @@ void updateCaseOne(int buffer_id)
         return;
     }
 	StrategyControl->ref_bits[freelist_index] = true;
-	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+	//SpinLockRelease(&StrategyControl->buffer_strategy_lock);
 	//elog(INFO, "[updateCaseOne]: Set ref_bit for buffer %d", buffer_id);
 	//logQueueState("[updateCaseOne] finished");
 }
 
 void updateCaseTwo(int buffer_id)
 {
-	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
+	//SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
 	addToQueueTail(buffer_id);
-	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+	//SpinLockRelease(&StrategyControl->buffer_strategy_lock);
 	//elog(INFO, "[updateCaseTwo]: Inserted buffer %d into queue tail", buffer_id);
 	//logQueueState("[updateCaseTwo] finished");
 }
 
 void updateCaseThree(int freelist_index)
 {
-	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
+	//SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
 	int buffer_id = StrategyControl->queue[StrategyControl->next];
 	//elog(INFO, "[updateCaseThree]: Evicting buffer index %d with buffer %d", freelist_index, buffer_id);
 	removeFromQueue(freelist_index);
 	//elog(INFO, "[updateCaseThree]: Evicted buffer index %d with buffer %d", freelist_index, buffer_id);
 	addToQueueTail(buffer_id);
-	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+	//SpinLockRelease(&StrategyControl->buffer_strategy_lock);
 	//logQueueState("[updateCaseThree] finished");
 }
 
 void updateCaseFour(int freelist_index)
 {
 	//elog(INFO, "[updateCaseFour]: removing buffer %d from queue", freelist_index);
-	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
+	//SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
 	removeFromQueue(freelist_index);
-	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
+	//SpinLockRelease(&StrategyControl->buffer_strategy_lock);
 	//elog(INFO, "[updateCaseFour]: Buffer %d removed", freelist_index);
 	//logQueueState("[updateCaseFour] finished");
 }
