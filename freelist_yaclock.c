@@ -377,7 +377,6 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state, bool *from_r
 				if (strategy != NULL)
 					AddBufferToRing(strategy, buf);
 				*buf_state = local_buf_state;
-				StrategyAccessBuffer(buffer_id, 2);
 				return buf;
 			}
 		}
@@ -931,7 +930,6 @@ void updateCaseThree(int buffer_id)
 	elog(INFO, "[updateCaseThree]: Evicted buffer %d", buffer_id);
 	addToQueueTail(buffer_id);
 	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
-	elog(INFO, "[updateCaseThree]: Evicted buffer %d", buffer_id);
 	logQueueState("[updateCaseThree] finished");
 }
 
@@ -949,7 +947,7 @@ void addToQueueTail(int buffer_id) {
 	elog(INFO, "[addToQueueTail]: Adding buffer %d to tail", buffer_id);
 	StrategyControl->queue[StrategyControl->queue_tail] = buffer_id;
 	StrategyControl->ref_bits[buffer_id] = false;
-	StrategyControl->queue_tail = (StrategyControl->queue_tail + 1) % NBuffers;
+	StrategyControl->queue_tail = StrategyControl->queue_tail + 1;
 	StrategyControl->num_elements++;
 	elog(INFO, "[addToQueueTail]: Inserted buffer %d into queue tail", buffer_id);
 	logQueueState("[addToQueueTail] finished");
@@ -965,9 +963,10 @@ void removeFromQueue(int buffer_id)
 	int index = -1;
 	for (int i = 0; i < StrategyControl->num_elements; ++i)
 	{
-		if (StrategyControl->queue[(StrategyControl->queue_head + i) % NBuffers] == buffer_id)
+		int queue_index = (StrategyControl->queue_head + i) % NBuffers;
+        if (StrategyControl->queue[queue_index] == buffer_id)
         {
-            index = (StrategyControl->queue_head + i) % NBuffers;
+            index = queue_index;
             break;
         }
 	}
@@ -981,10 +980,10 @@ void removeFromQueue(int buffer_id)
 	elog(INFO, "[removeFromQueue]: Removing buffer %d from queue at index %d", buffer_id, index);	
 
 	/* Shift remaining elements left */
-	for (int i = index; i != StrategyControl->queue_tail; i = (i + 1) % NBuffers)
-	{
-		StrategyControl->queue[i] = StrategyControl->queue[(i+1) % NBuffers];
-	}
+	for (int i = index; i != (StrategyControl->queue_tail - 1 + NBuffers) % NBuffers; i = (i + 1) % NBuffers)
+    {
+        StrategyControl->queue[i] = StrategyControl->queue[(i + 1) % NBuffers];
+    }
 
 	StrategyControl->queue_tail = (StrategyControl->queue_tail - 1 + NBuffers) % NBuffers;
 	StrategyControl->num_elements--;
