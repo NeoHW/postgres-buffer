@@ -947,9 +947,9 @@ void updateCaseThree(int freelist_index)
 {
 	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
 	int buffer_id = StrategyControl->queue[StrategyControl->next];
-	elog(INFO, "[updateCaseThree]: Evicting buffer %d", freelist_index);
+	elog(INFO, "[updateCaseThree]: Evicting buffer index %d with buffer %d", freelist_index, buffer_id);
 	removeFromQueue(freelist_index);
-	elog(INFO, "[updateCaseThree]: Evicted buffer %d", freelist_index);
+	elog(INFO, "[updateCaseThree]: Evicted buffer index %d with buffer %d", freelist_index, buffer_id);
 	addToQueueTail(buffer_id);
 	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
 	logQueueState("[updateCaseThree] finished");
@@ -971,6 +971,13 @@ void addToQueueTail(int buffer_id) {
 	StrategyControl->ref_bits[StrategyControl->queue_tail] = false;
 	StrategyControl->queue_tail = StrategyControl->queue_tail + 1;
 	StrategyControl->num_elements++;
+
+	elog(INFO, "moving next forward by one if next == queue_tail-1: next = %d, tail = %d",StrategyControl->next, StrategyControl->queue_tail);
+	if (StrategyControl->next == StrategyControl->queue_tail-1) {
+		StrategyControl->next = (StrategyControl->next + 1) % NBuffers;	
+		elog(INFO, "after moving: next = %d, tail = %d",StrategyControl->next, StrategyControl->queue_tail);
+	}
+
 	elog(INFO, "[addToQueueTail]: Inserted buffer %d into queue tail", buffer_id);
 	logQueueState("[addToQueueTail] finished");
 }
