@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "pgstat.h": "c",
+        "buf_internals.h": "c",
+        "__config": "c",
+        "ios": "c",
+        "iosfwd": "c",
+        "locale": "c",
+        "string": "c",
+        "proc.h": "c"
+    }
+}
