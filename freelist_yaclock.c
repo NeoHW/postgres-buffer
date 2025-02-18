@@ -110,8 +110,8 @@ static void AddBufferToRing(BufferAccessStrategy strategy,
 							BufferDesc *buf);
 void updateCaseOne(int buffer_id);
 void updateCaseTwo(int buffer_id);
-void updateCaseThree(int buffer_id);
-void updateCaseFour(int buffer_id);
+void updateCaseThree(int freelist_index);
+void updateCaseFour(int freelist_index);
 void addToQueueTail(int buffer_id);
 void removeFromQueue(int buffer_id);
 int getFreeListIndex(int buffer_id);
@@ -364,17 +364,16 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state, bool *from_r
 
 		if (BUF_STATE_GET_REFCOUNT(local_buf_state) == 0)
 		{
-			int freelist_index = getFreeListIndex(buffer_id);
-			if (StrategyControl->ref_bits[freelist_index])
+			if (StrategyControl->ref_bits[StrategyControl->next])
 			{
 				elog(INFO, "[StrategyGetBuffer][case 3]: Buffer %d has reference bit set, giving second chance", buffer_id);
-				StrategyControl->ref_bits[freelist_index] = false;
+				StrategyControl->ref_bits[StrategyControl->next] = false;
 			}
 			else
 			{
 				/* Found a usable buffer */
-				elog(INFO, "[StrategyGetBuffer][case 3]: Buffer %d is selected for replacement", buffer_id);
-				StrategyAccessBuffer(buffer_id, 3);
+				elog(INFO, "[StrategyGetBuffer][case 3]: Buffer %d is selected for replacement", StrategyControl->next);
+				StrategyAccessBuffer(StrategyControl->next, 3);
 
 				if (strategy != NULL)
 					AddBufferToRing(strategy, buf);
@@ -944,31 +943,32 @@ void updateCaseTwo(int buffer_id)
 	logQueueState("[updateCaseTwo] finished");
 }
 
-void updateCaseThree(int buffer_id)
+void updateCaseThree(int freelist_index)
 {
 	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
-	elog(INFO, "[updateCaseThree]: Evicting buffer %d", buffer_id);
-	removeFromQueue(buffer_id);
-	elog(INFO, "[updateCaseThree]: Evicted buffer %d", buffer_id);
+	int buffer_id = StrategyControl->queue[StrategyControl->next];
+	elog(INFO, "[updateCaseThree]: Evicting buffer %d", freelist_index);
+	removeFromQueue(freelist_index);
+	elog(INFO, "[updateCaseThree]: Evicted buffer %d", freelist_index);
 	addToQueueTail(buffer_id);
 	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
 	logQueueState("[updateCaseThree] finished");
 }
 
-void updateCaseFour(int buffer_id)
+void updateCaseFour(int freelist_index)
 {
-	elog(INFO, "[updateCaseFour]: removing buffer %d from queue", buffer_id);
+	elog(INFO, "[updateCaseFour]: removing buffer %d from queue", freelist_index);
 	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
-	removeFromQueue(buffer_id);
+	removeFromQueue(freelist_index);
 	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
-	elog(INFO, "[updateCaseFour]: Buffer %d removed", buffer_id);
+	elog(INFO, "[updateCaseFour]: Buffer %d removed", freelist_index);
 	logQueueState("[updateCaseFour] finished");
 }
 
 void addToQueueTail(int buffer_id) {
 	elog(INFO, "[addToQueueTail]: Adding buffer %d to tail", buffer_id);
 	StrategyControl->queue[StrategyControl->queue_tail] = buffer_id;
-	StrategyControl->ref_bits[buffer_id] = false;
+	StrategyControl->ref_bits[StrategyControl->queue_tail] = false;
 	StrategyControl->queue_tail = StrategyControl->queue_tail + 1;
 	StrategyControl->num_elements++;
 	elog(INFO, "[addToQueueTail]: Inserted buffer %d into queue tail", buffer_id);
@@ -980,23 +980,19 @@ void addToQueueTail(int buffer_id) {
  * This function, remove the buffer and shifts all remaining elements left
  * Since we are shifting the elements left, next would not need to be updated
  */
-void removeFromQueue(int buffer_id)
+void removeFromQueue(int freelist_index)
 {
-	int freelist_index = getFreeListIndex(buffer_id);
+	
+	elog(INFO, "[removeFromQueue]: Removing from freelist_index %dqueue ", freelist_index);	
 
-	if (freelist_index == -1)
-    {
-        elog(ERROR, "[removeFromQueue]: Buffer %d not found in queue", buffer_id);
-        return;
-    }
-
-	elog(INFO, "[removeFromQueue]: Removing buffer %d from queue at freelist_index %d", buffer_id, freelist_index);	
-
-	/* Shift remaining elements left */
+	/* Shift remaining elements and their reference bits to one position left */
 	for (int i = freelist_index; i != (StrategyControl->queue_tail - 1 + NBuffers) % NBuffers; i = (i + 1) % NBuffers)
     {
         StrategyControl->queue[i] = StrategyControl->queue[(i + 1) % NBuffers];
+		StrategyControl->ref_bits[i] = StrategyControl->ref_bits[(i + 1) % NBuffers];
     }
+
+	StrategyControl->ref_bits[StrategyControl->queue_tail] = false;
 
 	StrategyControl->queue_tail = (StrategyControl->queue_tail - 1 + NBuffers) % NBuffers;
 	StrategyControl->num_elements--;
