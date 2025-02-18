@@ -114,6 +114,7 @@ void updateCaseThree(int buffer_id);
 void updateCaseFour(int buffer_id);
 void addToQueueTail(int buffer_id);
 void removeFromQueue(int buffer_id);
+int getFreeListIndex(int buffer_id);
 void logQueueState(const char *message);
 
 /*
@@ -363,10 +364,11 @@ StrategyGetBuffer(BufferAccessStrategy strategy, uint32 *buf_state, bool *from_r
 
 		if (BUF_STATE_GET_REFCOUNT(local_buf_state) == 0)
 		{
-			if (StrategyControl->ref_bits[buffer_id])
+			int freelist_index = getFreeListIndex(buffer_id);
+			if (StrategyControl->ref_bits[freelist_index])
 			{
 				elog(INFO, "[StrategyGetBuffer][case 3]: Buffer %d has reference bit set, giving second chance", buffer_id);
-				StrategyControl->ref_bits[buffer_id] = false;
+				StrategyControl->ref_bits[freelist_index] = false;
 			}
 			else
 			{
@@ -904,10 +906,30 @@ void StrategyAccessBuffer(int buf_id, int event_num)
 	}
 }
 
+int getFreeListIndex(int buffer_id) {
+	for (int i = 0; i < StrategyControl->num_elements; ++i)
+	{
+		int queue_index = (StrategyControl->queue_head + i) % NBuffers;
+        if (StrategyControl->queue[queue_index] == buffer_id)
+        {
+			return queue_index;
+        }
+	}
+	return -1;
+}
+
 void updateCaseOne(int buffer_id)
 {
 	SpinLockAcquire(&StrategyControl->buffer_strategy_lock);
-	StrategyControl->ref_bits[buffer_id] = true;
+	int freelist_index;
+	
+	freelist_index = getFreeListIndex(buffer_id);
+	if (freelist_index == -1)
+    {
+        elog(ERROR, "[removeFromQueue]: Buffer %d not found in queue", buffer_id);
+        return;
+    }
+	StrategyControl->ref_bits[freelist_index] = true;
 	SpinLockRelease(&StrategyControl->buffer_strategy_lock);
 	elog(INFO, "[updateCaseOne]: Set ref_bit for buffer %d", buffer_id);
 	logQueueState("[updateCaseOne] finished");
@@ -960,27 +982,18 @@ void addToQueueTail(int buffer_id) {
  */
 void removeFromQueue(int buffer_id)
 {
-	int index = -1;
-	for (int i = 0; i < StrategyControl->num_elements; ++i)
-	{
-		int queue_index = (StrategyControl->queue_head + i) % NBuffers;
-        if (StrategyControl->queue[queue_index] == buffer_id)
-        {
-            index = queue_index;
-            break;
-        }
-	}
+	int freelist_index = getFreeListIndex(buffer_id);
 
-	if (index == -1)
+	if (freelist_index == -1)
     {
         elog(ERROR, "[removeFromQueue]: Buffer %d not found in queue", buffer_id);
         return;
     }
 
-	elog(INFO, "[removeFromQueue]: Removing buffer %d from queue at index %d", buffer_id, index);	
+	elog(INFO, "[removeFromQueue]: Removing buffer %d from queue at freelist_index %d", buffer_id, freelist_index);	
 
 	/* Shift remaining elements left */
-	for (int i = index; i != (StrategyControl->queue_tail - 1 + NBuffers) % NBuffers; i = (i + 1) % NBuffers)
+	for (int i = freelist_index; i != (StrategyControl->queue_tail - 1 + NBuffers) % NBuffers; i = (i + 1) % NBuffers)
     {
         StrategyControl->queue[i] = StrategyControl->queue[(i + 1) % NBuffers];
     }
