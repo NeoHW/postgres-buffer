@@ -3,6 +3,7 @@
 ## Overview
 
 This project involves modifying PostgreSQL’s buffer replacement policy to implement **YACLOCK (Yet Another Clock)**, a custom algorithm that replaces the default clock-based strategy.
+
 ---
 
 ## Contents
